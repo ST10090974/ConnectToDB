@@ -1,52 +1,31 @@
-﻿using ConnectToDB.Models;
+﻿using ConnectToDB.Data;
+using ConnectToDB.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using System.Data;
+
 
 namespace ConnectToDB.Controllers
 {
     public class StudentController : Controller
     {
-        private string con;
-        private IConfiguration _config;
-
+        DBUtility dbu;
         public StudentController(IConfiguration configuration)
         {
-            this._config = configuration;
-            this.con = _config.GetConnectionString("dbConnect");
+            dbu = new DBUtility(configuration);
         }
         // GET: StudentController
         public ActionResult Index()
         {
-            List<Student> stList = new List<Student>();
-            SqlConnection myCon = new SqlConnection(con);
-            SqlDataAdapter cmdSelect = new SqlDataAdapter($"SELECT * FROM STUDENT", myCon);
-            DataTable dt = new DataTable();
-            DataRow dr;
+          
 
-            myCon.Open();
-            cmdSelect.Fill(dt);
-
-            if (dt.Rows.Count > 0)
-            {
-
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    dr = dt.Rows[i];
-                    stList.Add(new Student((string)dr[0], (string)dr[1], (string)dr[2]));
-                }
-            }
-
-            myCon.Close();
-
-            return View(stList);
+            return View(dbu.GetAll());
         }
 
         // GET: StudentController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            return View();
+            Student st = dbu.GetStudent(id);
+            return View(st);
         }
 
         // GET: StudentController/Create
