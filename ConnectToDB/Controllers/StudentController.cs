@@ -16,8 +16,6 @@ namespace ConnectToDB.Controllers
         // GET: StudentController
         public ActionResult Index()
         {
-          
-
             return View(dbu.GetAll());
         }
 
@@ -41,6 +39,13 @@ namespace ConnectToDB.Controllers
         {
             try
             {
+                string stID = collection["txtStID"];  
+                string name = collection["txtName"];  
+                string surname = collection["txtSurname"];
+
+                Student st = new Student(stID, name, surname);
+                dbu.AddStudent(st);
+
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Drawing;
 
 namespace ConnectToDB.Data
 {
@@ -65,6 +66,16 @@ namespace ConnectToDB.Data
                 }
             }
             return st;
+        }
+
+        public void AddStudent(Student st)
+        {
+            using (SqlConnection myCon = new SqlConnection(con))
+            {
+                SqlCommand cmd = new SqlCommand($"INSERT INTO Student VALUES('{st.StudentID}','{st.Name}','{st.Surname}')", myCon);
+                myCon.Open();
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }
